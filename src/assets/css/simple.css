@@ -1,0 +1,1599 @@
+/**
+ * The core file of the framework, here are where all the imports occours.
+ *  
+ * CONTENTS
+ * 
+ * CONFIG
+ * functions.......Useful functions.
+ * mixins..........Useful mixins.
+ * vars............Variables for colos, typography, spaces, reponsive, radius,
+ *                 shadows and aspect ratios.
+ * 
+ * BASE
+ * reset...........Set some default styles to some elements.
+ * 
+ * LAYOUT
+ * All the classes in this category has a .o- (object) namespace class.
+ *
+ * container.......Styles to the contaienr component.
+ * flow............Styles to uniform vertical spacement.
+ * full-bleed......effect in which the element occupies 100% of the viewport 
+ *                 inside a container.
+ * grid............Styles for the grid system.
+ * media...........Styles to the media object component.
+ * page............Styles to a fluid layout or the sticky footer technic.
+ * section.........Good spaced vertical wrappers.
+ * 
+ * ABSTRACT COMPONENTS
+ * All the classes in this category has a .a- (abstract) namespace class. The
+ * abstract classes are classes that serve as a basis for other components and
+ * therefore care should be taken when changing them and, if possible, not 
+ * doing so. Its concrete use is discouraged by this documentation.
+ * 
+ * box.............Simple container that serve as basis for the following
+ *                 components:
+ *                 - card
+ *                 - form                 
+ *
+ * COMPONENTS
+ * All the classes in this category has a .c- (component) namespace class.
+ *
+ * bloquote........Bloquote styles.
+ * button..........Buttons and their variations.
+ * card............Card component styles.
+ * field...........Field component styles.
+ * form............Form component styles.
+ * subtitle........Subtitles and their variations.
+ * table...........Tables and their variations.
+ * title...........Titles and their variations.
+ *
+ * UTILITIES
+ * All the classes in this category has a .u- (utilitie) namespace class.
+ * colors..........Utilities for colors, like text-color utilities and 
+ *                 background-color utilities.
+ * 
+ * PLUGINS
+ * All the styles in this category are destined to custom styles to 3rd-party
+ * plugins.
+ * 
+ * Note: Comments must have to be a maximum of 80 characters. 
+ */
+/**
+ * Sets a series of default values for generic elements such as:
+ * 1.  base font-size.
+ * 2.  no browser paddings and margins. 
+ * 3.  defining the box-sizing to border-box which is best suited for 
+ *     responsive styles
+ * 4.  default content to after and before pseudo-elements.
+ * 5.  default font-family.
+ * 
+ */
+:root {
+  font-size: 16px;
+  /* [1] */
+}
+
+*,
+*::before,
+*::after {
+  /* [2] */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* [3] */
+}
+
+*::before,
+*::after {
+  content: "";
+  /* [4] */
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  /* [5] */
+}
+
+body {
+  overflow-x: hidden;
+  color: #021115;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.4;
+}
+
+ul {
+  list-style-position: inside;
+}
+
+p,
+li,
+dd,
+a {
+  font-size: 1.404em;
+}
+
+p {
+  line-height: 1.4;
+}
+
+.o-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 50vh;
+}
+.o-banner.-hero {
+  min-height: 100vh;
+}
+
+/**
+ * The container is a object that serve to wrapper a content, limit its width
+ * and center the wrapped content. Its max-width adapts to the width of the 
+ * viewport in a mobile-first approach. 
+ * 
+ */
+.o-container {
+  display: block;
+  max-width: 100%;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media screen and (min-width: 480px) {
+  .o-container {
+    max-width: 460px;
+  }
+}
+@media screen and (min-width: 568px) {
+  .o-container {
+    max-width: 540px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .o-container {
+    max-width: 720px;
+  }
+}
+@media screen and (min-width: 960px) {
+  .o-container {
+    max-width: 928px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .o-container {
+    max-width: 992px;
+  }
+}
+
+/**
+ * The flow is a wrapper that creates a vertical flow rhythm of the 
+ * wrapped content, through uniform spacing.
+ * 
+ */
+.o-flow > * + * {
+  margin-top: 1em;
+}
+.o-flow.-left {
+  text-align: left;
+}
+.o-flow.-center {
+  text-align: center;
+}
+.o-flow.-right {
+  text-align: right;
+}
+.o-flow > .o-section + .o-section {
+  margin-top: 1.5em;
+}
+.o-flow__section {
+  margin-top: 2.5em;
+}
+.o-flow > .o-grid {
+  margin-top: 1em;
+}
+
+/**
+ * full bleed is a wrapper that must be used inside a container so that the 
+ * content involved extends beyond the limits and occupies 100% of the 
+ * horizontal space of the screen.
+ * 
+ */
+.o-full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+/**
+ * The grid is a object that serve to wrapper a content and control the 
+ * positioning of the content through a cells. 
+ * The grid can be used in many ways:
+ * - with gaps(default).
+ * - without gaps(.-no-gaps).
+ * - control the alignment:
+ *   - left(.-left)
+ *   - center(.-center)
+ *   - right(.-right)
+ *   - around(.-around)
+ *   - evenly(.-evenly)
+ *   - between(.-between)
+ * 
+ * The cells can be used in many ways:
+ * - alone, without any modifier.
+ * - with number modifiers, that indicates the number of cells occupied. Ex:
+ *   <div class="grid__cell--2"></div>
+ * - with @breakpoint modifier. Ex: <div class="grid__cell@sm"></div>
+ * - with @breakpoint and number modifiers simultaneously. Ex:
+ *   <div class="grid__cell @sm--4"></div>
+ * - with many @breakpoint and number modifiers simultaneously. Ex:
+ *   <div class="grid__cell @sm--4 @md--6"></div> 
+ * 
+ * Breakpoints explained in _vars.scss file.
+ */
+.o-grid {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  margin: -0.625rem;
+}
+.o-grid.-left {
+  justify-content: flex-start;
+}
+.o-grid.-center {
+  justify-content: center;
+}
+.o-grid.-right {
+  justify-content: flex-end;
+}
+.o-grid.-around {
+  justify-content: space-around;
+}
+.o-grid.-evenly {
+  justify-content: space-evenly;
+}
+.o-grid.-between {
+  justify-content: space-between;
+}
+.o-grid.-no-gaps {
+  margin: 0;
+}
+.o-grid__cell--12,
+.o-grid__cell.\@--12, .o-grid__cell--11,
+.o-grid__cell.\@--11, .o-grid__cell--10,
+.o-grid__cell.\@--10, .o-grid__cell--9,
+.o-grid__cell.\@--9, .o-grid__cell--8,
+.o-grid__cell.\@--8, .o-grid__cell--7,
+.o-grid__cell.\@--7, .o-grid__cell--6,
+.o-grid__cell.\@--6, .o-grid__cell--5,
+.o-grid__cell.\@--5, .o-grid__cell--4,
+.o-grid__cell.\@--4, .o-grid__cell--3,
+.o-grid__cell.\@--3, .o-grid__cell--2,
+.o-grid__cell.\@--2, .o-grid__cell--1,
+.o-grid__cell.\@--1, .o-grid__cell {
+  flex: 1;
+  padding: 0.625rem;
+}
+
+.o-grid__cell.\@xlg--12, .o-grid__cell.\@xlg--11, .o-grid__cell.\@xlg--10, .o-grid__cell.\@xlg--9, .o-grid__cell.\@xlg--8, .o-grid__cell.\@xlg--7, .o-grid__cell.\@xlg--6, .o-grid__cell.\@xlg--5, .o-grid__cell.\@xlg--4, .o-grid__cell.\@xlg--3, .o-grid__cell.\@xlg--2, .o-grid__cell.\@xlg--1, .o-grid__cell.\@lg--12, .o-grid__cell.\@lg--11, .o-grid__cell.\@lg--10, .o-grid__cell.\@lg--9, .o-grid__cell.\@lg--8, .o-grid__cell.\@lg--7, .o-grid__cell.\@lg--6, .o-grid__cell.\@lg--5, .o-grid__cell.\@lg--4, .o-grid__cell.\@lg--3, .o-grid__cell.\@lg--2, .o-grid__cell.\@lg--1, .o-grid__cell.\@md--12, .o-grid__cell.\@md--11, .o-grid__cell.\@md--10, .o-grid__cell.\@md--9, .o-grid__cell.\@md--8, .o-grid__cell.\@md--7, .o-grid__cell.\@md--6, .o-grid__cell.\@md--5, .o-grid__cell.\@md--4, .o-grid__cell.\@md--3, .o-grid__cell.\@md--2, .o-grid__cell.\@md--1, .o-grid__cell.\@sm--12, .o-grid__cell.\@sm--11, .o-grid__cell.\@sm--10, .o-grid__cell.\@sm--9, .o-grid__cell.\@sm--8, .o-grid__cell.\@sm--7, .o-grid__cell.\@sm--6, .o-grid__cell.\@sm--5, .o-grid__cell.\@sm--4, .o-grid__cell.\@sm--3, .o-grid__cell.\@sm--2, .o-grid__cell.\@sm--1, .o-grid__cell.\@xsm--12, .o-grid__cell.\@xsm--11, .o-grid__cell.\@xsm--10, .o-grid__cell.\@xsm--9, .o-grid__cell.\@xsm--8, .o-grid__cell.\@xsm--7, .o-grid__cell.\@xsm--6, .o-grid__cell.\@xsm--5, .o-grid__cell.\@xsm--4, .o-grid__cell.\@xsm--3, .o-grid__cell.\@xsm--2, .o-grid__cell.\@xsm--1, .o-grid__cell\@xlg, .o-grid__cell\@lg, .o-grid__cell\@md, .o-grid__cell\@sm, .o-grid__cell\@xsm {
+  flex: 0 0 100%;
+  padding: 0.625rem;
+}
+
+.o-grid__cell--1,
+.o-grid__cell.\@--1 {
+  flex: 0 0 8.3333333333%;
+}
+
+.o-grid__cell--2,
+.o-grid__cell.\@--2 {
+  flex: 0 0 16.6666666667%;
+}
+
+.o-grid__cell--3,
+.o-grid__cell.\@--3 {
+  flex: 0 0 25%;
+}
+
+.o-grid__cell--4,
+.o-grid__cell.\@--4 {
+  flex: 0 0 33.3333333333%;
+}
+
+.o-grid__cell--5,
+.o-grid__cell.\@--5 {
+  flex: 0 0 41.6666666667%;
+}
+
+.o-grid__cell--6,
+.o-grid__cell.\@--6 {
+  flex: 0 0 50%;
+}
+
+.o-grid__cell--7,
+.o-grid__cell.\@--7 {
+  flex: 0 0 58.3333333333%;
+}
+
+.o-grid__cell--8,
+.o-grid__cell.\@--8 {
+  flex: 0 0 66.6666666667%;
+}
+
+.o-grid__cell--9,
+.o-grid__cell.\@--9 {
+  flex: 0 0 75%;
+}
+
+.o-grid__cell--10,
+.o-grid__cell.\@--10 {
+  flex: 0 0 83.3333333333%;
+}
+
+.o-grid__cell--11,
+.o-grid__cell.\@--11 {
+  flex: 0 0 91.6666666667%;
+}
+
+.o-grid__cell--12,
+.o-grid__cell.\@--12 {
+  flex: 0 0 100%;
+}
+
+@media screen and (min-width: 480px) {
+  .o-grid__cell\@xsm {
+    flex: 1;
+  }
+}
+@media screen and (min-width: 568px) {
+  .o-grid__cell\@sm {
+    flex: 1;
+  }
+}
+@media screen and (min-width: 768px) {
+  .o-grid__cell\@md {
+    flex: 1;
+  }
+}
+@media screen and (min-width: 960px) {
+  .o-grid__cell\@lg {
+    flex: 1;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .o-grid__cell\@xlg {
+    flex: 1;
+  }
+}
+@media screen and (min-width: 480px) {
+  .o-grid__cell.\@xsm--1 {
+    flex: 0 0 8.3333333333%;
+  }
+
+  .o-grid__cell.\@xsm--2 {
+    flex: 0 0 16.6666666667%;
+  }
+
+  .o-grid__cell.\@xsm--3 {
+    flex: 0 0 25%;
+  }
+
+  .o-grid__cell.\@xsm--4 {
+    flex: 0 0 33.3333333333%;
+  }
+
+  .o-grid__cell.\@xsm--5 {
+    flex: 0 0 41.6666666667%;
+  }
+
+  .o-grid__cell.\@xsm--6 {
+    flex: 0 0 50%;
+  }
+
+  .o-grid__cell.\@xsm--7 {
+    flex: 0 0 58.3333333333%;
+  }
+
+  .o-grid__cell.\@xsm--8 {
+    flex: 0 0 66.6666666667%;
+  }
+
+  .o-grid__cell.\@xsm--9 {
+    flex: 0 0 75%;
+  }
+
+  .o-grid__cell.\@xsm--10 {
+    flex: 0 0 83.3333333333%;
+  }
+
+  .o-grid__cell.\@xsm--11 {
+    flex: 0 0 91.6666666667%;
+  }
+}
+@media screen and (min-width: 568px) {
+  .o-grid__cell.\@sm--1 {
+    flex: 0 0 8.3333333333%;
+  }
+
+  .o-grid__cell.\@sm--2 {
+    flex: 0 0 16.6666666667%;
+  }
+
+  .o-grid__cell.\@sm--3 {
+    flex: 0 0 25%;
+  }
+
+  .o-grid__cell.\@sm--4 {
+    flex: 0 0 33.3333333333%;
+  }
+
+  .o-grid__cell.\@sm--5 {
+    flex: 0 0 41.6666666667%;
+  }
+
+  .o-grid__cell.\@sm--6 {
+    flex: 0 0 50%;
+  }
+
+  .o-grid__cell.\@sm--7 {
+    flex: 0 0 58.3333333333%;
+  }
+
+  .o-grid__cell.\@sm--8 {
+    flex: 0 0 66.6666666667%;
+  }
+
+  .o-grid__cell.\@sm--9 {
+    flex: 0 0 75%;
+  }
+
+  .o-grid__cell.\@sm--10 {
+    flex: 0 0 83.3333333333%;
+  }
+
+  .o-grid__cell.\@sm--11 {
+    flex: 0 0 91.6666666667%;
+  }
+}
+@media screen and (min-width: 768px) {
+  .o-grid__cell.\@md--1 {
+    flex: 0 0 8.3333333333%;
+  }
+
+  .o-grid__cell.\@md--2 {
+    flex: 0 0 16.6666666667%;
+  }
+
+  .o-grid__cell.\@md--3 {
+    flex: 0 0 25%;
+  }
+
+  .o-grid__cell.\@md--4 {
+    flex: 0 0 33.3333333333%;
+  }
+
+  .o-grid__cell.\@md--5 {
+    flex: 0 0 41.6666666667%;
+  }
+
+  .o-grid__cell.\@md--6 {
+    flex: 0 0 50%;
+  }
+
+  .o-grid__cell.\@md--7 {
+    flex: 0 0 58.3333333333%;
+  }
+
+  .o-grid__cell.\@md--8 {
+    flex: 0 0 66.6666666667%;
+  }
+
+  .o-grid__cell.\@md--9 {
+    flex: 0 0 75%;
+  }
+
+  .o-grid__cell.\@md--10 {
+    flex: 0 0 83.3333333333%;
+  }
+
+  .o-grid__cell.\@md--11 {
+    flex: 0 0 91.6666666667%;
+  }
+}
+@media screen and (min-width: 960px) {
+  .o-grid__cell.\@lg--1 {
+    flex: 0 0 8.3333333333%;
+  }
+
+  .o-grid__cell.\@lg--2 {
+    flex: 0 0 16.6666666667%;
+  }
+
+  .o-grid__cell.\@lg--3 {
+    flex: 0 0 25%;
+  }
+
+  .o-grid__cell.\@lg--4 {
+    flex: 0 0 33.3333333333%;
+  }
+
+  .o-grid__cell.\@lg--5 {
+    flex: 0 0 41.6666666667%;
+  }
+
+  .o-grid__cell.\@lg--6 {
+    flex: 0 0 50%;
+  }
+
+  .o-grid__cell.\@lg--7 {
+    flex: 0 0 58.3333333333%;
+  }
+
+  .o-grid__cell.\@lg--8 {
+    flex: 0 0 66.6666666667%;
+  }
+
+  .o-grid__cell.\@lg--9 {
+    flex: 0 0 75%;
+  }
+
+  .o-grid__cell.\@lg--10 {
+    flex: 0 0 83.3333333333%;
+  }
+
+  .o-grid__cell.\@lg--11 {
+    flex: 0 0 91.6666666667%;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .o-grid__cell.\@xlg--1 {
+    flex: 0 0 8.3333333333%;
+  }
+
+  .o-grid__cell.\@xlg--2 {
+    flex: 0 0 16.6666666667%;
+  }
+
+  .o-grid__cell.\@xlg--3 {
+    flex: 0 0 25%;
+  }
+
+  .o-grid__cell.\@xlg--4 {
+    flex: 0 0 33.3333333333%;
+  }
+
+  .o-grid__cell.\@xlg--5 {
+    flex: 0 0 41.6666666667%;
+  }
+
+  .o-grid__cell.\@xlg--6 {
+    flex: 0 0 50%;
+  }
+
+  .o-grid__cell.\@xlg--7 {
+    flex: 0 0 58.3333333333%;
+  }
+
+  .o-grid__cell.\@xlg--8 {
+    flex: 0 0 66.6666666667%;
+  }
+
+  .o-grid__cell.\@xlg--9 {
+    flex: 0 0 75%;
+  }
+
+  .o-grid__cell.\@xlg--10 {
+    flex: 0 0 83.3333333333%;
+  }
+
+  .o-grid__cell.\@xlg--11 {
+    flex: 0 0 91.6666666667%;
+  }
+}
+.o-grid.-no-gaps > .o-grid__cell, .o-grid.-no-gaps > .o-grid__cell--1, .o-grid.-no-gaps > .o-grid__cell--2, .o-grid.-no-gaps > .o-grid__cell--3, .o-grid.-no-gaps > .o-grid__cell--4, .o-grid.-no-gaps > .o-grid__cell--5, .o-grid.-no-gaps > .o-grid__cell--6, .o-grid.-no-gaps > .o-grid__cell--7, .o-grid.-no-gaps > .o-grid__cell--8, .o-grid.-no-gaps > .o-grid__cell--9, .o-grid.-no-gaps > .o-grid__cell--10, .o-grid.-no-gaps > .o-grid__cell--11, .o-grid.-no-gaps > .o-grid__cell--12, .o-grid.-no-gaps > .o-grid__cell\@xsm, .o-grid.-no-gaps > .o-grid__cell\@sm, .o-grid.-no-gaps > .o-grid__cell\@md, .o-grid.-no-gaps > .o-grid__cell\@lg, .o-grid.-no-gaps > .o-grid__cell\@xlg {
+  padding: 0;
+}
+
+/**
+ * media is a wrapper that is used to position an image and a content 
+ * horizontally. Can be used:
+ * - aligning the image to the left and the content on right;
+ * - (reverse) aligning the image to the right and the content on left;
+ * - (default)aligning the image at the top in relation to the content;
+ * - (center)aligning the image at the center in relation to the content;
+ * - (bottom)aligning the image at the bottom in relation to the content;
+ * 
+ */
+.o-media {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.o-media.-reverse {
+  flex-direction: row-reverse;
+}
+.o-media.-center {
+  align-items: center;
+}
+.o-media.-bottom {
+  align-items: flex-end;
+}
+.o-media__figure {
+  margin-right: 0.625rem;
+  max-width: 100%;
+}
+.o-media__body {
+  flex: 1;
+}
+
+/**
+ * The .o-page class is a layout class that serves to creates the sticky
+ * footer effect.
+ * 
+ * 1. Uses the display: flex to make the layout fluid, sets the flex-direction
+ *    to column to follow the default page flow and min-height: 100vh to ensure
+ *    that effect is going to be okay.
+ * 2. Turns the height to the .o-page__main class fluid based on the avaliable
+ *    space.  
+ * 
+ */
+.o-page {
+  /* [1] */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.o-page__main {
+  flex: 1;
+  /* [2] */
+}
+
+/**
+ * section is a wrapper that is used to create a vertical spacing to a content.
+ * Can be used in some variations:
+ * - (no-top) without the top spacing
+ * - (no-bottom) without the bottom spacing
+ * - (small) small spacing
+ * - (default) medium spacing
+ * - (large) large spacing
+ *
+ */
+.o-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.o-section.-no-top {
+  padding-top: 0;
+}
+.o-section.-no-bottom {
+  padding-bottom: 0;
+}
+.o-section--small {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.o-section--small.-no-top {
+  padding-top: 0;
+}
+.o-section--small.-no-bottom {
+  padding-bottom: 0;
+}
+.o-section--large {
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+.o-section--large.-no-top {
+  padding-top: 0;
+}
+.o-section--large.-no-bottom {
+  padding-bottom: 0;
+}
+
+/*
+ * Is a wrapper to make the table component responsive.
+ */
+.o-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.a-box, .c-form, .c-card {
+  padding: 1.25rem;
+  border: 1px solid #eee;
+}
+.a-box.-center, .-center.c-form, .-center.c-card {
+  text-align: center;
+}
+.a-box.-right, .-right.c-form, .-right.c-card {
+  text-align: right;
+}
+.a-box.-rounded, .-rounded.c-form, .-rounded.c-card {
+  border-radius: 4px;
+}
+.a-box.-raised, .-raised.c-form, .-raised.c-card {
+  box-shadow: 0 8px 16px rgba(119, 119, 119, 0.2);
+}
+.a-box.-primary, .-primary.c-form, .-primary.c-card {
+  background: #1488d6;
+  border-color: #1488d6;
+  color: #fff;
+}
+.a-box.-success, .-success.c-form, .-success.c-card {
+  background: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+.a-box.-danger, .-danger.c-form, .-danger.c-card {
+  background: #ff3920;
+  border-color: #ff3920;
+  color: #fff;
+}
+.a-box.-warning, .-warning.c-form, .-warning.c-card {
+  background: #ffff26;
+  border-color: #ffff26;
+  color: #000;
+}
+.a-box.-info, .-info.c-form, .-info.c-card {
+  background: #0eecbc;
+  border-color: #0eecbc;
+  color: #000;
+}
+.a-box.-dark, .-dark.c-form, .-dark.c-card {
+  background: #021115;
+  border-color: #021115;
+  color: #fff;
+}
+.a-box.-light, .-light.c-form, .-light.c-card {
+  background: #eff7fb;
+  border-color: #eff7fb;
+  color: #000;
+}
+.a-box.-black, .-black.c-form, .-black.c-card {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+.a-box.-white, .-white.c-form, .-white.c-card {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+.a-box.-white, .-white.c-form, .-white.c-card, .a-box.-black, .-black.c-form, .-black.c-card {
+  border-color: #eee;
+}
+
+/**
+ * Is a component that specifies a section that is quoted from another source.
+ */
+.c-bloquote {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/**
+ * A generic button in the ui. Can have so much variations such as:
+ * - color variations.
+ * - size variations.
+ * - full rounded(.rounded) and rounded(.rounded-corners) corners variations.
+ * - text button variations
+ * - ghost button variations(outlined)
+ * - semi button variations(lighter background) 
+ * - raised button variations
+ */
+.c-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.3s ease-in-out;
+}
+.c-button.-small {
+  padding: 0.5rem 1rem;
+}
+.c-button.-large {
+  padding: 0.75rem 1.5rem;
+}
+.c-button.-rounded-corners {
+  border-radius: 3px;
+}
+.c-button.-rounded {
+  border-radius: 100px;
+}
+.c-button.-primary {
+  background-color: #1488d6;
+  color: #fff;
+}
+.c-button.-primary:hover {
+  background-color: #4fa6e0;
+}
+.c-button.-primary:active {
+  background-color: #72b8e6;
+}
+.c-button.-success {
+  background-color: #28a745;
+  color: #fff;
+}
+.c-button.-success:hover {
+  background-color: #5ebd74;
+}
+.c-button.-success:active {
+  background-color: #7eca8f;
+}
+.c-button.-danger {
+  background-color: #ff3920;
+  color: #fff;
+}
+.c-button.-danger:hover {
+  background-color: #ff6b58;
+}
+.c-button.-danger:active {
+  background-color: #ff8879;
+}
+.c-button.-warning {
+  background-color: #ffff26;
+  color: #000;
+}
+.c-button.-warning:hover {
+  background-color: #ffff5c;
+}
+.c-button.-warning:active {
+  background-color: #ffff7d;
+}
+.c-button.-info {
+  background-color: #0eecbc;
+  color: #000;
+}
+.c-button.-info:hover {
+  background-color: #4af1cd;
+}
+.c-button.-info:active {
+  background-color: #6ef4d7;
+}
+.c-button.-dark {
+  background-color: #021115;
+  color: #fff;
+}
+.c-button.-dark:hover {
+  background-color: #414d50;
+}
+.c-button.-dark:active {
+  background-color: #677073;
+}
+.c-button.-light {
+  background-color: #eff7fb;
+  color: #000;
+}
+.c-button.-light:hover {
+  background-color: #f3f9fc;
+}
+.c-button.-light:active {
+  background-color: #f5fafd;
+}
+.c-button.-black {
+  background-color: #000;
+  color: #fff;
+}
+.c-button.-black:hover {
+  background-color: #404040;
+}
+.c-button.-black:active {
+  background-color: #666666;
+}
+.c-button.-white {
+  background-color: #fff;
+  color: #000;
+}
+.c-button.-white:hover {
+  background-color: white;
+}
+.c-button.-white:active {
+  background-color: white;
+}
+.c-button.-ghost, .c-button.-text, .c-button.-semi {
+  background: transparent;
+}
+.c-button.-ghost.-primary, .c-button.-text.-primary, .c-button.-semi.-primary {
+  color: #1488d6;
+}
+.c-button.-ghost.-success, .c-button.-text.-success, .c-button.-semi.-success {
+  color: #28a745;
+}
+.c-button.-ghost.-danger, .c-button.-text.-danger, .c-button.-semi.-danger {
+  color: #ff3920;
+}
+.c-button.-ghost.-warning, .c-button.-text.-warning, .c-button.-semi.-warning {
+  color: #ffff26;
+}
+.c-button.-ghost.-info, .c-button.-text.-info, .c-button.-semi.-info {
+  color: #0eecbc;
+}
+.c-button.-ghost.-dark, .c-button.-text.-dark, .c-button.-semi.-dark {
+  color: #021115;
+}
+.c-button.-ghost.-light, .c-button.-text.-light, .c-button.-semi.-light {
+  color: #eff7fb;
+}
+.c-button.-ghost.-black, .c-button.-text.-black, .c-button.-semi.-black {
+  color: #000;
+}
+.c-button.-ghost.-white, .c-button.-text.-white, .c-button.-semi.-white {
+  color: #fff;
+}
+.c-button.-ghost {
+  border: 1px solid currentColor;
+}
+.c-button.-ghost.-primary:hover {
+  background-color: #1488d6;
+  color: #fff;
+  border-color: transparent;
+}
+.c-button.-ghost.-primary:focus {
+  background-color: rgba(20, 136, 214, 0.12);
+  color: #0e5f96;
+}
+.c-button.-ghost.-primary:active {
+  background-color: #4fa6e0;
+}
+.c-button.-ghost.-success:hover {
+  background-color: #28a745;
+  color: #fff;
+  border-color: transparent;
+}
+.c-button.-ghost.-success:focus {
+  background-color: rgba(40, 167, 69, 0.12);
+  color: #1c7530;
+}
+.c-button.-ghost.-success:active {
+  background-color: #5ebd74;
+}
+.c-button.-ghost.-danger:hover {
+  background-color: #ff3920;
+  color: #fff;
+  border-color: transparent;
+}
+.c-button.-ghost.-danger:focus {
+  background-color: rgba(255, 57, 32, 0.12);
+  color: #b32816;
+}
+.c-button.-ghost.-danger:active {
+  background-color: #ff6b58;
+}
+.c-button.-ghost.-warning:hover {
+  background-color: #ffff26;
+  color: #000;
+  border-color: transparent;
+}
+.c-button.-ghost.-warning:focus {
+  background-color: rgba(255, 255, 38, 0.12);
+  color: #b3b31b;
+}
+.c-button.-ghost.-warning:active {
+  background-color: #ffff5c;
+}
+.c-button.-ghost.-info:hover {
+  background-color: #0eecbc;
+  color: #000;
+  border-color: transparent;
+}
+.c-button.-ghost.-info:focus {
+  background-color: rgba(14, 236, 188, 0.12);
+  color: #0aa584;
+}
+.c-button.-ghost.-info:active {
+  background-color: #4af1cd;
+}
+.c-button.-ghost.-dark:hover {
+  background-color: #021115;
+  color: #fff;
+  border-color: transparent;
+}
+.c-button.-ghost.-dark:focus {
+  background-color: rgba(2, 17, 21, 0.12);
+  color: #010c0f;
+}
+.c-button.-ghost.-dark:active {
+  background-color: #414d50;
+}
+.c-button.-ghost.-light:hover {
+  background-color: #eff7fb;
+  color: #000;
+  border-color: transparent;
+}
+.c-button.-ghost.-light:focus {
+  background-color: rgba(239, 247, 251, 0.12);
+  color: #a7adb0;
+}
+.c-button.-ghost.-light:active {
+  background-color: #f3f9fc;
+}
+.c-button.-ghost.-black:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: transparent;
+}
+.c-button.-ghost.-black:focus {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: black;
+}
+.c-button.-ghost.-black:active {
+  background-color: #404040;
+}
+.c-button.-ghost.-white:hover {
+  background-color: #fff;
+  color: #000;
+  border-color: transparent;
+}
+.c-button.-ghost.-white:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #b3b3b3;
+}
+.c-button.-ghost.-white:active {
+  background-color: white;
+}
+.c-button.-raised.-primary {
+  box-shadow: 0 2px 4px rgba(20, 136, 214, 0.3);
+}
+.c-button.-raised.-primary:hover, .c-button.-raised.-primary:focus {
+  box-shadow: 0 4px 8px rgba(20, 136, 214, 0.3);
+}
+.c-button.-raised.-primary:active {
+  box-shadow: 0 7px 14px rgba(20, 136, 214, 0.3);
+}
+.c-button.-raised.-success {
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+.c-button.-raised.-success:hover, .c-button.-raised.-success:focus {
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+.c-button.-raised.-success:active {
+  box-shadow: 0 7px 14px rgba(40, 167, 69, 0.3);
+}
+.c-button.-raised.-danger {
+  box-shadow: 0 2px 4px rgba(255, 57, 32, 0.3);
+}
+.c-button.-raised.-danger:hover, .c-button.-raised.-danger:focus {
+  box-shadow: 0 4px 8px rgba(255, 57, 32, 0.3);
+}
+.c-button.-raised.-danger:active {
+  box-shadow: 0 7px 14px rgba(255, 57, 32, 0.3);
+}
+.c-button.-raised.-warning {
+  box-shadow: 0 2px 4px rgba(255, 255, 38, 0.3);
+}
+.c-button.-raised.-warning:hover, .c-button.-raised.-warning:focus {
+  box-shadow: 0 4px 8px rgba(255, 255, 38, 0.3);
+}
+.c-button.-raised.-warning:active {
+  box-shadow: 0 7px 14px rgba(255, 255, 38, 0.3);
+}
+.c-button.-raised.-info {
+  box-shadow: 0 2px 4px rgba(14, 236, 188, 0.3);
+}
+.c-button.-raised.-info:hover, .c-button.-raised.-info:focus {
+  box-shadow: 0 4px 8px rgba(14, 236, 188, 0.3);
+}
+.c-button.-raised.-info:active {
+  box-shadow: 0 7px 14px rgba(14, 236, 188, 0.3);
+}
+.c-button.-raised.-dark {
+  box-shadow: 0 2px 4px rgba(2, 17, 21, 0.3);
+}
+.c-button.-raised.-dark:hover, .c-button.-raised.-dark:focus {
+  box-shadow: 0 4px 8px rgba(2, 17, 21, 0.3);
+}
+.c-button.-raised.-dark:active {
+  box-shadow: 0 7px 14px rgba(2, 17, 21, 0.3);
+}
+.c-button.-raised.-light {
+  box-shadow: 0 2px 4px rgba(239, 247, 251, 0.3);
+}
+.c-button.-raised.-light:hover, .c-button.-raised.-light:focus {
+  box-shadow: 0 4px 8px rgba(239, 247, 251, 0.3);
+}
+.c-button.-raised.-light:active {
+  box-shadow: 0 7px 14px rgba(239, 247, 251, 0.3);
+}
+.c-button.-raised.-black {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.c-button.-raised.-black:hover, .c-button.-raised.-black:focus {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.c-button.-raised.-black:active {
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
+}
+.c-button.-raised.-white {
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+.c-button.-raised.-white:hover, .c-button.-raised.-white:focus {
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+}
+.c-button.-raised.-white:active {
+  box-shadow: 0 7px 14px rgba(255, 255, 255, 0.3);
+}
+.c-button.-semi.-primary, .c-button.-text:hover.-primary {
+  background-color: rgba(20, 136, 214, 0.12);
+  color: #0e5f96;
+}
+.c-button.-semi.-success, .c-button.-text:hover.-success {
+  background-color: rgba(40, 167, 69, 0.12);
+  color: #1c7530;
+}
+.c-button.-semi.-danger, .c-button.-text:hover.-danger {
+  background-color: rgba(255, 57, 32, 0.12);
+  color: #b32816;
+}
+.c-button.-semi.-warning, .c-button.-text:hover.-warning {
+  background-color: rgba(255, 255, 38, 0.12);
+  color: #b3b31b;
+}
+.c-button.-semi.-info, .c-button.-text:hover.-info {
+  background-color: rgba(14, 236, 188, 0.12);
+  color: #0aa584;
+}
+.c-button.-semi.-dark, .c-button.-text:hover.-dark {
+  background-color: rgba(2, 17, 21, 0.12);
+  color: #010c0f;
+}
+.c-button.-semi.-light, .c-button.-text:hover.-light {
+  background-color: rgba(239, 247, 251, 0.12);
+  color: #a7adb0;
+}
+.c-button.-semi.-black, .c-button.-text:hover.-black {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: black;
+}
+.c-button.-semi.-white, .c-button.-text:hover.-white {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #b3b3b3;
+}
+.c-button.-semi:hover.-primary {
+  background-color: rgba(20, 136, 214, 0.25);
+}
+.c-button.-semi:hover.-success {
+  background-color: rgba(40, 167, 69, 0.25);
+}
+.c-button.-semi:hover.-danger {
+  background-color: rgba(255, 57, 32, 0.25);
+}
+.c-button.-semi:hover.-warning {
+  background-color: rgba(255, 255, 38, 0.25);
+}
+.c-button.-semi:hover.-info {
+  background-color: rgba(14, 236, 188, 0.25);
+}
+.c-button.-semi:hover.-dark {
+  background-color: rgba(2, 17, 21, 0.25);
+}
+.c-button.-semi:hover.-light {
+  background-color: rgba(239, 247, 251, 0.25);
+}
+.c-button.-semi:hover.-black {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.c-button.-semi:hover.-white {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+.c-button.-semi:active.-primary, .c-button.-text:active.-primary {
+  background-color: #1488d6;
+  color: #fff;
+}
+.c-button.-semi:active.-success, .c-button.-text:active.-success {
+  background-color: #28a745;
+  color: #fff;
+}
+.c-button.-semi:active.-danger, .c-button.-text:active.-danger {
+  background-color: #ff3920;
+  color: #fff;
+}
+.c-button.-semi:active.-warning, .c-button.-text:active.-warning {
+  background-color: #ffff26;
+  color: #000;
+}
+.c-button.-semi:active.-info, .c-button.-text:active.-info {
+  background-color: #0eecbc;
+  color: #000;
+}
+.c-button.-semi:active.-dark, .c-button.-text:active.-dark {
+  background-color: #021115;
+  color: #fff;
+}
+.c-button.-semi:active.-light, .c-button.-text:active.-light {
+  background-color: #eff7fb;
+  color: #000;
+}
+.c-button.-semi:active.-black, .c-button.-text:active.-black {
+  background-color: #000;
+  color: #fff;
+}
+.c-button.-semi:active.-white, .c-button.-text:active.-white {
+  background-color: #fff;
+  color: #000;
+}
+
+/*
+ * Card is a component that represents a self contained content piece. Can have
+ * a so much of variations like:
+ * - flat(default)
+ * - rounded(.-rounded)
+ * - stacked(.-stacked) - the top image is raised
+ * - raised(.-raised)
+ * - colors: 
+ *   - the same color of the $colors array, more info in _vars.scss file.
+ * 
+ * IMPORTANT: this component extends the abstract component box located in the
+ *            file components/abstract/_box.scss.
+ * 
+ * FOOTER NOTES:
+ * 1. Creates an image that occupies 100% of the card's horizontal space. 
+ * 2. To make the image occupy 100% of the card's horizontal space, 100% is 
+ *    added with 2 times the padding plus 4px pixels to correct a visual gap.
+ * 3. To center the image, use the margin-left with the negative padding value 
+ *    to paste the image on an edge, since the image has the width of the card.
+ * 4. To make the image "float" onto the card, position: absolute is used to 
+ *    center the image in the card and go up a little.
+ * 5. Because position: absolute the image doesn't occupies space, then to fix
+ *    this a padding-top is used with the half of the image height.
+ * 6. to prevent the image from overlapping elements that are above the card, a 
+ *    margin-top half the size of the image is used.
+ */
+.c-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.c-card__figure {
+  position: relative;
+}
+.c-card__image {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  /* [1] */
+}
+.c-card__image.-rounded {
+  border-radius: 4px;
+}
+.c-card__image.-top {
+  border-radius: 4px 4px 0 0;
+}
+.c-card__image.-full-bleed {
+  max-width: initial;
+  width: calc(100% + 2.25rem + 4px);
+  /* [2] */
+  margin-left: calc(-1.125rem - 2px);
+  /* [3] */
+}
+.c-card__body {
+  padding: 0.625rem 1.25rem;
+}
+.c-card__body.-large {
+  padding: 1.25rem;
+}
+.c-card .c-subtitle {
+  margin-bottom: 0.625rem;
+}
+.c-card__text {
+  font-size: 18px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.c-card.-stacked {
+  /* [6] */
+  margin-top: calc(150px / 2);
+}
+.c-card.-stacked > .c-card__figure {
+  /* [5] */
+  padding-top: calc(150px / 2);
+}
+.c-card.-stacked > .c-card__figure > .c-card__image {
+  /* [4] */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 85%;
+  height: 150px;
+  box-shadow: 0 8px 16px rgba(119, 119, 119, 0.2);
+}
+
+/*
+ * A container to fields, that represents a HTML form.
+ */
+.c-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media screen and (min-width: 568px) {
+  .c-form {
+    align-items: flex-start;
+  }
+}
+
+/*
+ * The UI field component, includes a label, input, helper messages and icons.
+ * 
+ */
+.c-field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+@media screen and (min-width: 568px) {
+  .c-field {
+    justify-content: flex-start;
+  }
+}
+.c-field__label, .c-field__input {
+  font-size: 18px;
+}
+.c-field__label {
+  width: 100%;
+}
+.c-field__input {
+  width: calc(100% - 30px);
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+.c-field__input:hover {
+  box-shadow: 0 3px 6px rgba(10, 10, 10, 0.15);
+}
+.c-field__input:focus {
+  border-color: #1488d6;
+  box-shadow: 0 4px 8px rgba(10, 10, 10, 0.15), 0 5px 10px rgba(20, 20, 20, 0.05);
+}
+.c-field__icon {
+  flex: 0 0 24px;
+  height: 24px;
+  margin-left: 6px;
+}
+.c-field__icon + .c-field__message {
+  max-width: calc(100% - 80px);
+}
+.c-field__icon + .c-field__message + .c-field__message {
+  margin-right: 30px;
+}
+.c-field__message {
+  font-size: 0.707em;
+  margin-right: auto;
+  max-width: calc(100% - 50px);
+}
+.c-field__message + .c-field__message {
+  max-width: 41px;
+  margin-right: 0;
+  margin-left: auto;
+  align-self: start;
+}
+.c-field.-success {
+  color: #28a745;
+}
+.c-field.-success .c-field__input {
+  border-color: #28a745;
+}
+.c-field.-danger {
+  color: #ff3920;
+}
+.c-field.-danger .c-field__input {
+  border-color: #ff3920;
+}
+
+/**
+ * Is a default subtitle style, subtitles are great to highlight a text from the 
+ * others but less than title and create visual hierarchy. Can some varaitions: 
+ *  - small
+ *  - medium(default)
+ *  - large
+ *
+ *
+ * Other notes: if you are looking for titles see in the file 
+ * components/_title.scss.
+ */
+.c-subtitle {
+  font-size: 1.49925em;
+  font-weight: 400;
+  font-style: italic;
+}
+.c-subtitle.-smallest {
+  font-size: 1.1232em;
+}
+.c-subtitle.-small {
+  font-size: 1.404em;
+  font-style: italic;
+}
+.c-subtitle.-large {
+  font-size: 2.12025em;
+}
+
+/*
+ * is a component to place bidimensional data. The following elements are 
+ * optional:
+ * - c-table__header
+ * - c-table__body
+ * - c-table__footer
+ * 
+ * A table of contents must have at least following elements:
+ * - .c-table
+ * - .c-table__row
+ * - .c-table__title
+ * - .c-table__cell
+ *
+ */
+.c-table {
+  display: table;
+  border-collapse: collapse;
+  background: #fff;
+  width: 100%;
+}
+.c-table__header {
+  display: table-header-group;
+}
+.c-table__body {
+  display: table-row-group;
+}
+.c-table__footer {
+  display: table-footer-group;
+}
+.c-table__row {
+  border-bottom: 1px solid #ddd;
+}
+.c-table__title, .c-table__cell {
+  text-align: center;
+  display: table-cell;
+  padding: 0.625rem 1.25rem;
+}
+.c-table__title.-left, .c-table__cell.-left {
+  text-align: left;
+}
+.c-table__title.-right, .c-table__cell.-right {
+  text-align: right;
+}
+.c-table__title {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.c-table.-stripped .c-table__row {
+  border-color: #eee;
+}
+.c-table.-stripped .c-table__body .c-table__row:nth-child(odd) {
+  background: #eee;
+}
+.c-table.-stripped .c-table__footer {
+  background: #eee;
+}
+.c-table.-stripped-inverted .c-table__row {
+  border-color: #eee;
+}
+.c-table.-stripped-inverted .c-table__body .c-table__row:nth-child(even) {
+  background: #eee;
+}
+.c-table.-stripped-inverted .c-table__footer {
+  background: #eee;
+}
+
+/**
+ * Is a default title style, titles are great to highlight a text from the 
+ * others and create visual hierarchy. Can some varaitions: 
+ *  - small
+ *  - medium(default)
+ *  - large
+ *
+ *
+ * Other notes: if you are looking for subtitles see in the file 
+ * components/_subtitle.scss.
+ */
+.c-title {
+  font-size: 2.827em;
+  font-weight: normal;
+}
+.c-title.-smallest {
+  font-size: 1.49925em;
+}
+.c-title.-small {
+  font-size: 1.999em;
+}
+.c-title.-large {
+  font-size: 3.998em;
+}
+.c-title.-strong {
+  font-weight: bold;
+}
+
+/*
+ * A collection of color utilities. The list of utilities in this file:
+ * - text-color
+ * - background-color
+ * - gradient-color
+ */
+.u-text-primary {
+  color: #1488d6;
+}
+.u-text-success {
+  color: #28a745;
+}
+.u-text-danger {
+  color: #ff3920;
+}
+.u-text-warning {
+  color: #ffff26;
+}
+.u-text-info {
+  color: #0eecbc;
+}
+.u-text-dark {
+  color: #021115;
+}
+.u-text-light {
+  color: #eff7fb;
+}
+.u-text-black {
+  color: #000;
+}
+.u-text-white {
+  color: #fff;
+}
+
+.u-background-primary {
+  background-color: #1488d6;
+}
+.u-background-success {
+  background-color: #28a745;
+}
+.u-background-danger {
+  background-color: #ff3920;
+}
+.u-background-warning {
+  background-color: #ffff26;
+}
+.u-background-info {
+  background-color: #0eecbc;
+}
+.u-background-dark {
+  background-color: #021115;
+}
+.u-background-light {
+  background-color: #eff7fb;
+}
+.u-background-black {
+  background-color: #000;
+}
+.u-background-white {
+  background-color: #fff;
+}
+
+.u-gradient-1 {
+  background-image: linear-gradient(130deg, #13ffff, #3ba3ff, #9c00ff);
+}
+.u-gradient-2 {
+  background-image: linear-gradient(130deg, #006fff, #00e5e5, #0bff96);
+}
+.u-gradient-3 {
+  background-image: linear-gradient(#ec038b, #fb6468, #fbb936);
+}
+
+/*# sourceMappingURL=/simple.css.map */
