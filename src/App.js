@@ -40,10 +40,15 @@ function App() {
   };
 
   const addTask = (title) => {
-    const toggledTasks = [...tasks];
-    const newId = toggledTasks[toggledTasks.length - 1].id + 1;
-    toggledTasks.push(task(newId, title));
-    setTasks(toggledTasks);
+    if (tasks.length > 0) {
+      const toggledTasks = [...tasks];
+      const newId = toggledTasks[toggledTasks.length - 1].id + 1;
+      toggledTasks.push(task(newId, title));
+      setTasks(toggledTasks);
+    } else {
+      const toggledTasks = [task(1, title)];
+      setTasks(toggledTasks);
+    }
   };
 
   return (
